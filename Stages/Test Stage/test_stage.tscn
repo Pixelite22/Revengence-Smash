@@ -1,7 +1,65 @@
- 
-[node name="Ledge2" parent="." unique_id=1893430278 instance=ExtResource("3_2dg7a")]
-position = Vector2(1445, 769)
+[gd_scene format=3 uid="uid://dkwo4f5mapyhj"]
+
+[ext_resource type="Texture2D" uid="uid://ctldgjubbxqmd" path="res://Stages/Test Stage/1(1).png" id="1_7ykx6"]
+[ext_resource type="PackedScene" uid="uid://cqn14nm2wlidd" path="res://Stages/Stage Parts/ledge.tscn" id="2_2dg7a"]
+[ext_resource type="PackedScene" uid="uid://cyu5t07gcb8bx" path="res://Characters/Base Character (Fox)/base_character.tscn" id="3_2dg7a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_em3us"]
+size = Vector2(965, 39)
+
+[node name="Test Stage" type="Node2D" unique_id=1238800829]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=924689066]
+scale = Vector2(2, 2)
+texture = ExtResource("1_7ykx6")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=1612744617]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=549269083]
+position = Vector2(0.5, 229.5)
+shape = SubResource("RectangleShape2D_em3us")
+
+[node name="Label" type="Label" parent="Floor" unique_id=2033035521]
+offset_left = 27.0
+offset_top = 216.0
+offset_right = 67.0
+offset_bottom = 239.0
+text = "Floor"
+
+[node name="Wall" type="StaticBody2D" parent="." unique_id=914731045]
+collision_layer = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall" unique_id=37322962]
+position = Vector2(-960, -540)
+polygon = PackedVector2Array(959, 885, 1300, 885, 1385, 845, 1439, 792, 478, 791, 536, 845, 622, 887)
+
+[node name="Label" type="Label" parent="Wall" unique_id=588258782]
+offset_left = 27.0
+offset_top = 280.0
+offset_right = 67.0
+offset_bottom = 303.0
+text = "Wall"
+
+[node name="Ledge" parent="." unique_id=1659141917 instance=ExtResource("2_2dg7a")]
+position = Vector2(-482, 230)
+
+[node name="Ledge2" parent="." unique_id=1059888966 instance=ExtResource("2_2dg7a")]
+position = Vector2(481, 230)
 ledge_side = "Right"
 
-[node name="Ledge3" parent="." unique_id=1291113028 instance=ExtResource("3_2dg7a")]
-position = Vector2(963, 615)
+[node name="Camera2D" type="Camera2D" parent="." unique_id=303997597]
+zoom = Vector2(1.777, 1.777)
+limit_left = -1140
+limit_top = -710
+limit_right = 1150
+limit_bottom = 550
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.0
+drag_right_margin = 0.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="Base Character" parent="." unique_id=1356891652 instance=ExtResource("3_2dg7a")]
+position = Vector2(-313, 164)
