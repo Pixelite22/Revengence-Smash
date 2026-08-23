@@ -1,0 +1,7 @@
+ 
+[node name="Ledge2" parent="." unique_id=1893430278 instance=ExtResource("3_2dg7a")]
+position = Vector2(1445, 769)
+ledge_side = "Right"
+
+[node name="Ledge3" parent="." unique_id=1291113028 instance=ExtResource("3_2dg7a")]
+position = Vector2(963, 615)
