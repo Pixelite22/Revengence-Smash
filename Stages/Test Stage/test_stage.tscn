@@ -49,7 +49,7 @@ position = Vector2(481, 230)
 ledge_side = "Right"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=303997597]
-zoom = Vector2(1.777, 1.777)
+zoom = Vector2(1.5, 1.5)
 limit_left = -1140
 limit_top = -710
 limit_right = 1150

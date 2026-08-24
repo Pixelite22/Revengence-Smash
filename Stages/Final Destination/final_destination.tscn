@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://d1lyu72s2n0t0"]
+
+[ext_resource type="Texture2D" uid="uid://k1tts8mw246c" path="res://Stages/Final Destination/Custom _ Edited - Super Smash Bros. Customs - Super Smash Bros. Melee Stages - Final Destination.png" id="1_gtv6g"]
+[ext_resource type="Texture2D" uid="uid://bgpr21fvaiyd0" path="res://Stages/Final Destination/Final Destination Stage.png" id="2_75syw"]
+[ext_resource type="PackedScene" uid="uid://cqn14nm2wlidd" path="res://Stages/Stage Parts/ledge.tscn" id="3_aivab"]
+[ext_resource type="PackedScene" uid="uid://cyu5t07gcb8bx" path="res://Characters/Base Character (Fox)/base_character.tscn" id="4_7efag"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aivab"]
+atlas = ExtResource("2_75syw")
+region = Rect2(0, 0, 456, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7efag"]
+atlas = ExtResource("2_75syw")
+region = Rect2(456, 0, 456, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2fhbn"]
+atlas = ExtResource("2_75syw")
+region = Rect2(912, 0, 456, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_te515"]
+atlas = ExtResource("2_75syw")
+region = Rect2(1368, 0, 456, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l15ux"]
+atlas = ExtResource("2_75syw")
+region = Rect2(1824, 0, 456, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ebrw"]
+atlas = ExtResource("2_75syw")
+region = Rect2(2280, 0, 456, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3qk4v"]
+atlas = ExtResource("2_75syw")
+region = Rect2(2736, 0, 456, 239)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ubli0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aivab")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7efag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2fhbn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_te515")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l15ux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ebrw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3qk4v")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2fhbn"]
+size = Vector2(420, 20)
+
+[node name="Final Destination" type="Node2D" unique_id=2011438295]
+
+[node name="Backgound" type="Sprite2D" parent="." unique_id=960431849]
+scale = Vector2(3, 3)
+texture = ExtResource("1_gtv6g")
+region_enabled = true
+region_rect = Rect2(407.5999, 12.899902, 556.19995, 372.59998)
+
+[node name="Stage" type="AnimatedSprite2D" parent="." unique_id=1939193999]
+position = Vector2(0, 336)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_ubli0")
+autoplay = "default"
+frame_progress = 0.6563406
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=488132783]
+position = Vector2(3, 168)
+scale = Vector2(2, 2)
+collision_layer = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1299262461]
+shape = SubResource("RectangleShape2D_2fhbn")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1787246570]
+zoom = Vector2(1.5, 1.5)
+limit_left = -1140
+limit_top = -710
+limit_right = 1150
+limit_bottom = 550
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.0
+drag_right_margin = 0.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="Ledge" parent="." unique_id=1659141917 instance=ExtResource("3_aivab")]
+position = Vector2(-432, 168)
+
+[node name="Ledge2" parent="." unique_id=1577345131 instance=ExtResource("3_aivab")]
+position = Vector2(432, 168)
+ledge_side = "Right"
+
+[node name="Base Character" parent="." unique_id=1356891652 instance=ExtResource("4_7efag")]
