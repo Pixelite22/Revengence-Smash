@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://b81cuwwegv16n"]
+
+[ext_resource type="Texture2D" uid="uid://bl0y4n5e7topx" path="res://Stages/Onett Test Stage/Onett.png" id="1_vqynn"]
+[ext_resource type="Script" uid="uid://dm3pegeqxd4wj" path="res://Stages/Final Destination/stage_camera.gd" id="2_0wyhp"]
+[ext_resource type="PackedScene" uid="uid://cqn14nm2wlidd" path="res://Stages/Stage Parts/ledge.tscn" id="2_rit6s"]
+[ext_resource type="PackedScene" uid="uid://cyu5t07gcb8bx" path="res://Characters/Base Character (Fox)/base_character.tscn" id="3_0wyhp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0wyhp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0wyhp"]
+size = Vector2(469, 45)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rit6s"]
+size = Vector2(2600, 34.5)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_xno8a"]
+b = Vector2(241, 70)
+
+[node name="Onett" type="Node2D" unique_id=639567510]
+
+[node name="Art" type="Node2D" parent="." unique_id=69612162]
+
+[node name="Background" type="Sprite2D" parent="Art" unique_id=1722874698]
+scale = Vector2(5, 5)
+texture = ExtResource("1_vqynn")
+region_enabled = true
+region_rect = Rect2(4.3670197, 3.619995, 500.128, 376.37802)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Art" unique_id=296158314]
+sprite_frames = SubResource("SpriteFrames_0wyhp")
+frame_progress = 0.9775027
+
+[node name="Floor Collisions" type="Node2D" parent="." unique_id=2008618981]
+
+[node name="Top Awning" type="StaticBody2D" parent="Floor Collisions" unique_id=1757035202]
+collision_layer = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor Collisions/Top Awning" unique_id=523579963]
+position = Vector2(-8.5, 92.5)
+shape = SubResource("RectangleShape2D_0wyhp")
+
+[node name="Ledge" parent="Floor Collisions/Top Awning" unique_id=1659141917 instance=ExtResource("2_rit6s")]
+position = Vector2(-243, 88)
+
+[node name="Ledge2" parent="Floor Collisions/Top Awning" unique_id=1461594132 instance=ExtResource("2_rit6s")]
+position = Vector2(229, 88)
+ledge_side = "Right"
+
+[node name="Bottom Awning" type="StaticBody2D" parent="Floor Collisions" unique_id=1344985555]
+collision_layer = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor Collisions/Bottom Awning" unique_id=1235901225]
+position = Vector2(-8.5, 422.5)
+shape = SubResource("RectangleShape2D_0wyhp")
+
+[node name="Ledge3" parent="Floor Collisions/Bottom Awning" unique_id=1588310619 instance=ExtResource("2_rit6s")]
+position = Vector2(229, 424)
+ledge_side = "Right"
+
+[node name="Ledge4" parent="Floor Collisions/Bottom Awning" unique_id=1733077399 instance=ExtResource("2_rit6s")]
+position = Vector2(-243, 424)
+
+[node name="Floor" type="StaticBody2D" parent="Floor Collisions" unique_id=1150464689]
+collision_layer = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor Collisions/Floor" unique_id=1999362949]
+position = Vector2(-26, 799.25)
+shape = SubResource("RectangleShape2D_rit6s")
+
+[node name="Red Overhang" type="StaticBody2D" parent="Floor Collisions" unique_id=1765299069]
+collision_layer = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor Collisions/Red Overhang" unique_id=1060788110]
+position = Vector2(-776, 552.25)
+shape = SubResource("SegmentShape2D_xno8a")
+
+[node name="Ledge5" parent="Floor Collisions/Red Overhang" unique_id=1148599126 instance=ExtResource("2_rit6s")]
+position = Vector2(-533, 632)
+ledge_side = "Right"
+
+[node name="Red Roof" type="StaticBody2D" parent="Floor Collisions" unique_id=2138497844]
+collision_layer = 6
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Floor Collisions/Red Roof" unique_id=1363007240]
+polygon = PackedVector2Array(-772, 252, -1117, 378, -1116, 808, -770, 813)
+
+[node name="Ledge6" parent="Floor Collisions/Red Roof" unique_id=2112936521 instance=ExtResource("2_rit6s")]
+position = Vector2(-771, 275)
+ledge_side = "Right"
+
+[node name="Ledge7" parent="Floor Collisions/Red Roof" unique_id=129126045 instance=ExtResource("2_rit6s")]
+position = Vector2(-1115, 411)
+
+[node name="Blue Building" type="StaticBody2D" parent="Floor Collisions" unique_id=515496563]
+collision_layer = 6
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Floor Collisions/Blue Building" unique_id=44960861]
+polygon = PackedVector2Array(377, 567, 648, 400, 919, 548, 922, 793, 379, 790)
+
+[node name="Ledge8" parent="Floor Collisions/Blue Building" unique_id=1967869996 instance=ExtResource("2_rit6s")]
+position = Vector2(375, 588)
+
+[node name="Ledge9" parent="Floor Collisions/Blue Building" unique_id=1779452833 instance=ExtResource("2_rit6s")]
+position = Vector2(919, 572)
+ledge_side = "Right"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=754518914]
+zoom = Vector2(0.8, 0.8)
+limit_left = -1140
+limit_top = -710
+limit_right = 1150
+limit_bottom = 550
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.0
+drag_right_margin = 0.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
+script = ExtResource("2_0wyhp")
+
+[node name="Base Character" parent="." unique_id=1356891652 instance=ExtResource("3_0wyhp")]
+scale = Vector2(2, 2)
