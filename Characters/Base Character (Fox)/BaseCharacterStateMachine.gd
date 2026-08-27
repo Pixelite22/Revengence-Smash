@@ -28,6 +28,12 @@ func _ready() -> void:
 	add_state('LEFT_TILT') #21
 	add_state('RIGHT_TILT') #22
 	add_state('JAB') #23
+	add_state('AIR_ATTACK')
+	add_state('NEUTRAL_AIR')
+	add_state('UP_AIR')
+	add_state('DOWN_AIR')
+	add_state('FORWARD_AIR')
+	add_state('BACK_AIR')
 	#When ready, call the set_state function and set the state to STAND
 	call_deferred("set_state", states.STAND)
 
@@ -63,6 +69,10 @@ func get_transition(delta):
 	if Input.is_action_just_pressed("attack_%s" % id) and tilt() == true:
 		parent.frame_reset()
 		return states.GROUND_ATTACK
+	
+	if Input.is_action_just_pressed("attack_%s" % id) and air_attack() == true:
+		parent.frame_reset()
+		return states.AIR_ATTACK
 	
 	##From here we match the state the character currently has, 
 	##and then check for the conditions needed to change to a new state 
@@ -618,6 +628,65 @@ func get_transition(delta):
 		states.JAB:
 			return states.STAND
 		
+		states.AIR_ATTACK:
+			if Input.is_action_pressed("up_%s" % id):
+				parent.frame_reset()
+				return states.UP_AIR
+			if Input.is_action_pressed("down_%s" % id):
+				parent.frame_reset()
+				return states.DOWN_AIR
+			if Input.is_action_pressed("left_%s" % id):
+				parent.frame_reset()
+				if parent.direction() == 1:
+					return states.BACK_AIR
+				else:
+					return states.FORWARD_AIR
+			if Input.is_action_pressed("right_%s" % id):
+				parent.frame_reset()
+				if parent.direction() == 1:
+					return states.FORWARD_AIR
+				else:
+					return states.BACK_AIR
+			else:
+				parent.frame_reset()
+				return states.NEUTRAL_AIR
+		
+		states.UP_AIR:
+			if parent.frame == 0:
+				parent.up_air()
+				pass
+			if parent.up_air():
+				return states.AIR
+		
+		states.DOWN_AIR:
+			if parent.frame == 0:
+				parent.down_air()
+				pass
+			if parent.down_air():
+				return states.AIR
+		
+		states.FORWARD_AIR:
+			if parent.frame == 0:
+				parent.forward_air()
+				pass
+			if parent.forward_air():
+				return states.AIR
+		
+		states.BACK_AIR:
+			if parent.frame == 0:
+				parent.back_air()
+				pass
+			if parent.back_air():
+				return states.AIR
+		
+		states.NEUTRAL_AIR:
+			return states.AIR
+			#if parent.frame == 0:
+			#	parent.neutral_air()
+			#	pass
+#			if parent.neutral_air():
+#				return states.AIR
+		
 
 func enter_state(new_state, old_state):
 	match new_state:
@@ -686,7 +755,23 @@ func enter_state(new_state, old_state):
 		states.JAB:
 			parent.play_animation("Jab")
 			parent.state.text = "Jab"
-			
+		states.AIR_ATTACK:
+			parent.state.text = "Air Attack"
+		states.NEUTRAL_AIR:
+			parent.play_animation('Air Neutral')
+			parent.state.text = "Neutral Air"
+		states.UP_AIR:
+			parent.play_animation('Air Up')
+			parent.state.text = "Up Air"
+		states.DOWN_AIR:
+			parent.play_animation('Air Down')
+			parent.state.text = "Down Air"
+		states.FORWARD_AIR:
+			parent.play_animation('Air Forward')
+			parent.state.text = "Forward Air"
+		states.BACK_AIR:
+			parent.play_animation('Air Back')
+			parent.state.text = "Back Air"
 
 func exit_state(old_state, new_state):
 	pass
@@ -833,4 +918,8 @@ func ledge(): ##Function handles ledge interactions
 
 func tilt():
 	if state_includes([states.STAND, states.MOONWALK, states.DASH, states.RUN, states.WALK, states.CROUCH]):
+		return true
+
+func air_attack():
+	if state_includes([states.SHORT_HOP, states.FULL_HOP, states.AIR]):
 		return true

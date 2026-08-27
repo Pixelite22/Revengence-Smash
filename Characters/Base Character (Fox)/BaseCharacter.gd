@@ -133,3 +133,38 @@ func up_tilt():
 			create_hitbox(69, 62, 8, 90, 3, 120, 3, 'normal', Vector2(1.5, 1.0), 0, 1)
 		if sprite.frame == 2:
 			return true
+
+#Air Attacks
+func neutral_air(): ##FLAGGING FOR ONLY HAVING A SINGLE FRAME
+	if sprite.animation == "Air Neutral":
+		create_hitbox(69, 62, 8, 70, 5, 120, 3, 'normal', Vector2(1.5, 1.0), 0, 1)
+		await get_tree().create_timer(.25).timeout
+		return true
+
+func forward_air():
+	if sprite.animation == "Air Forward":
+		if sprite.frame == 0:
+			create_hitbox(47, 35, 8, 45, 5, 120, 3, 'normal', Vector2(23.5, 14.5), 0, 1)
+		if sprite.frame == 5:
+			return true
+
+func back_air():
+	if sprite.animation == "Air Back":
+		if sprite.frame == 1:
+			create_hitbox(45, 33, 8, -45, 5, 120, 3, 'normal', Vector2(-28.5, 10.5), 0, 1)
+		if sprite.frame == 3:
+			return true
+
+func up_air():
+	if sprite.animation == "Air Up":
+		if sprite.frame == 1:
+			create_hitbox(40, 36, 8, 90, 5, 120, 3, 'normal', Vector2(-1, -24), 0, 1)
+		if sprite.frame == 3:
+			return true
+
+func down_air():
+	if sprite.animation == "Air Down":
+		if sprite.frame == 0:
+			create_hitbox(42, 47, 8, -90, 5, 120, 3, 'normal', Vector2(7, 12.5), 0, 1)
+		if sprite.frame == 3:
+			return true
