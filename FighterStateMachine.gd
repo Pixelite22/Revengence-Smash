@@ -37,4 +37,5 @@ func set_state(new_state):
 		enter_state(new_state, prev_state) #run enter state logic
 
 func add_state(state_name): #function adds states to the state machine array
-	states[state_name] = states.size()
+	states[state_name] = states.size() #place the newest state at the back of the array.
+	#This works as size returns an int starting at 1, but the index starts at 0, meaning it will always place the state at the very end
