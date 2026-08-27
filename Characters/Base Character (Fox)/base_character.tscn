@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://brjy25rd5aaeh" path="res://Characters/Base Character (Fox)/Fox/sprites/bair_strip4.png" id="1_4fyo7"]
 [ext_resource type="Texture2D" uid="uid://dlarethjg72xx" path="res://Characters/Base Character (Fox)/Fox/sprites/airdodge_strip6.png" id="1_jwubn"]
 [ext_resource type="Script" uid="uid://3474s7hw0ugr" path="res://Characters/Base Character (Fox)/BaseCharacter.gd" id="1_wx5m1"]
+[ext_resource type="PackedScene" uid="uid://gbp0awkika0t" path="res://Characters/Misc Parts/hitbox.tscn" id="2_n1tt7"]
 [ext_resource type="Texture2D" uid="uid://bfgc7qh2bco1s" path="res://Characters/Base Character (Fox)/Fox/sprites/dair_strip4.png" id="3_2j5cr"]
 [ext_resource type="Texture2D" uid="uid://cgd6x35yit7pg" path="res://Characters/Base Character (Fox)/Fox/sprites/fair_strip6.png" id="4_ypwmb"]
 [ext_resource type="Texture2D" uid="uid://bmaru7exdxx80" path="res://Characters/Base Character (Fox)/Fox/sprites/nair_strip1.png" id="5_2w0yq"]
@@ -1368,13 +1369,17 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ypwmb"]
 size = Vector2(43, 62)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n1tt7"]
+size = Vector2(69, 62)
+
 [node name="Base Character" type="CharacterBody2D" unique_id=1356891652]
 collision_mask = 30
 script = ExtResource("1_wx5m1")
+hitbox = ExtResource("2_n1tt7")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=703604713]
 sprite_frames = SubResource("SpriteFrames_ci3la")
-animation = &"Roll Forward"
+animation = &"Jab"
 
 [node name="Stage Collision" type="CollisionShape2D" parent="." unique_id=1714064749]
 position = Vector2(0.5, 1)
@@ -1426,3 +1431,8 @@ offset_right = 20.0
 offset_bottom = -33.0
 text = "State"
 vertical_alignment = 1
+
+[node name="Test Hitbox" type="CollisionShape2D" parent="." unique_id=338074041]
+visible = false
+position = Vector2(1.5, 1)
+shape = SubResource("RectangleShape2D_n1tt7")

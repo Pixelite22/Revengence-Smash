@@ -22,6 +22,12 @@ func _ready() -> void:
 	add_state('LEDGE_JUMP') #15
 	add_state('LEDGE_HOP') #16
 	add_state('LEDGE_ROLL') #17
+	add_state('GROUND_ATTACK') #18
+	add_state('UP_TILT') #19
+	add_state('DOWN_TILT') #20
+	add_state('LEFT_TILT') #21
+	add_state('RIGHT_TILT') #22
+	add_state('JAB') #23
 	#When ready, call the set_state function and set the state to STAND
 	call_deferred("set_state", states.STAND)
 
@@ -29,8 +35,8 @@ func _ready() -> void:
 func state_logic(delta):
 	parent.update_frames(delta) #updates frame count on character each frame
 	parent._physics_process(delta) #pass the delta from here to the one on the physics process of the character
-	if parent.regrab > 0:
-		parent.regrab -= 1
+	if parent.regrab > 0: #If the regrab is greater then 0
+		parent.regrab -= 1 #subtract 1 over and over until we hit 0, each time the function is called
 
 ##This function is the meat of this script, handling the transitions between states
 func get_transition(delta):  
@@ -38,7 +44,7 @@ func get_transition(delta):
 	#parent.velocity *= 2
 	parent.up_direction = Vector2.UP
 	parent.move_and_slide() ##May need to update this later as the tutorial was in godot 3.0 and had some extra stuff on it
-	parent.state.text = str(state) #For debugging, display the current state as text
+#	parent.state.text = str(state) #For debugging, display the current state as text
 	
 	if landing(): #If a character is landing as determined by the called function
 		parent.frame_reset() #reset frames to 0
@@ -53,6 +59,10 @@ func get_transition(delta):
 		return states.LEDGE_CATCH #return the ledge catched state
 	else: #But if they aren't grabbing the ledge
 		parent.reset_ledge() #Reset the ledge variables through the parent function
+	
+	if Input.is_action_just_pressed("attack_%s" % id) and tilt() == true:
+		parent.frame_reset()
+		return states.GROUND_ATTACK
 	
 	##From here we match the state the character currently has, 
 	##and then check for the conditions needed to change to a new state 
@@ -510,12 +520,110 @@ func get_transition(delta):
 				parent.reset_ledge()
 				parent.frame_reset()
 				return states.STAND
+		
+		states.GROUND_ATTACK:
+			if Input.is_action_pressed("up_%s" % id):
+				parent.frame_reset()
+				return states.UP_TILT
+			if Input.is_action_pressed("down_%s" % id):
+				parent.frame_reset()
+				return states.DOWN_TILT
+			if Input.is_action_pressed("left_%s" % id):
+				parent.turn(true)
+				parent.frame_reset()
+				return states.LEFT_TILT
+			if Input.is_action_pressed("right_%s" % id):
+				parent.turn(false)
+				parent.frame_reset()
+				return states.RIGHT_TILT
+			parent.frame_reset()
+			return states.JAB
+		
+		states.UP_TILT:
+			if parent.frame == 0:
+				parent.up_tilt()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.up_tilt():
+				if Input.is_action_pressed("up_%s" % id):
+					parent.frame_reset()
+					return states.STAND
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.DOWN_TILT:
+			if parent.frame == 0:
+				parent.down_tilt()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.down_tilt():
+				if Input.is_action_pressed("down_%s" % id):
+					parent.frame_reset()
+					return states.CROUCH
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.LEFT_TILT:
+			if parent.frame == 0:
+				parent.forward_tilt()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.forward_tilt():
+				if Input.is_action_pressed("left_%s" % id):
+					parent.frame_reset()
+					return states.DASH
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.RIGHT_TILT:
+			if parent.frame == 0:
+				parent.forward_tilt()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.forward_tilt():
+				if Input.is_action_pressed("right_%s" % id):
+					parent.frame_reset()
+					return states.DASH
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.JAB:
+			return states.STAND
+		
 
 func enter_state(new_state, old_state):
 	match new_state:
-		#states.:
-		#	parent.play_animation()
-		#	parent.states.text = str()
+		#states.STATE_NAME:
+		#	parent.play_animation('Coresponding Animation')
+		#	parent.state.text = str('STATE_NAME')
 		states.STAND:
 			parent.play_animation('Idle')
 			parent.state.text = str('STAND')
@@ -561,6 +669,24 @@ func enter_state(new_state, old_state):
 		states.LEDGE_ROLL:
 			parent.play_animation('Roll Forward')
 			parent.state.text = str("Ledge_Roll")
+		states.GROUND_ATTACK:
+			parent.state.text = str('Ground Attack')
+		states.UP_TILT:
+			parent.play_animation("Tilt Up")
+			parent.state.text = "Up Tilt"
+		states.DOWN_TILT:
+			parent.play_animation("Tilt Down")
+			parent.state.text = "Down Tilt"
+		states.LEFT_TILT:
+			parent.play_animation("Tilt Forward")
+			parent.state.text = "Left Tilt"
+		states.RIGHT_TILT:
+			parent.play_animation("Tilt Forward")
+			parent.state.text = "Right Tilt"
+		states.JAB:
+			parent.play_animation("Jab")
+			parent.state.text = "Jab"
+			
 
 func exit_state(old_state, new_state):
 	pass
@@ -704,3 +830,7 @@ func ledge(): ##Function handles ledge interactions
 				collider.is_grabbed = true
 				parent.last_ledge = collider
 				return true
+
+func tilt():
+	if state_includes([states.STAND, states.MOONWALK, states.DASH, states.RUN, states.WALK, states.CROUCH]):
+		return true
