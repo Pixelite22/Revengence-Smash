@@ -12,7 +12,7 @@ var parent = get_parent()
 @export var type = 'normal' #Hit Effects like Fire and Ice can go here
 @export var angle_flipper = 0 #How does hitbox interact with opponent.  Examples of this include fliipping opponents (ala mario's cape), launching opponents inwards (like ness' lightning) or always launching in a single direction (like jigglypuff's rest)
 @onready var hitbox = get_node("Hitbox Shape")
-@onready var parent_state = get_parent().selfState
+@onready var parent_state = get_parent().self_state
 
 #Frame Variables
 var kb_value
@@ -20,7 +20,7 @@ var frames = 0.0
 var player_list = [] ##list of things the hitbox can't hit!  Like the player themselves
 
 
-func set_params(wid, hgt, dmg, ang, bkb, kbs, dur, hlm, typ, pos, af, hit, parent = get_parent()):
+func set_params(wid, hgt, dmg, ang, bkb, kbs, dur, typ, pos, af, hlm, parent = get_parent()):
 	self.position = Vector2(0, 0)
 	player_list.append(parent) #Set player to the player list
 	player_list.append(self) #as well as the hitbox itself incase there are multiple hitboxes that collide with themselves
@@ -32,10 +32,9 @@ func set_params(wid, hgt, dmg, ang, bkb, kbs, dur, hlm, typ, pos, af, hit, paren
 	base_kb = bkb
 	kb_scaling = kbs
 	duration = dur
-	hitlag_mod = hlm
 	type = typ
 	self.position = pos
-	hitlag_mod = hit
+	hitlag_mod = hlm
 	angle_flipper = af
 	update_extents()
 	connect("area_entered", hitbox_collide)
