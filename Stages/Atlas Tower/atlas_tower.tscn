@@ -12,9 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://cqn14nm2wlidd" path="res://Stages/Stage Parts/ledge.tscn" id="9_hupy6"]
 [ext_resource type="PackedScene" uid="uid://cyu5t07gcb8bx" path="res://Characters/Base Character (Fox)/base_character.tscn" id="10_g0tkc"]
 [ext_resource type="Script" uid="uid://dm3pegeqxd4wj" path="res://Stages/Final Destination/stage_camera.gd" id="11_y6kj2"]
+[ext_resource type="Texture2D" uid="uid://di5ej1k7dlbl8" path="res://Stages/Atlas Tower/Atlas Tower Spire and Top.png" id="12_y6kj2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i0q5b"]
-size = Vector2(470, 34.96666)
+size = Vector2(457.39996, 35.999992)
 
 [node name="Atlas Tower" type="Node2D" unique_id=109381269]
 
@@ -67,7 +68,7 @@ scroll_scale = Vector2(0.25, 0.25)
 follow_viewport = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Background/Building 4" unique_id=1759553322]
-position = Vector2(-112, 142)
+position = Vector2(-112.00001, 190)
 scale = Vector2(6, 6)
 texture = ExtResource("4_hupy6")
 
@@ -89,48 +90,6 @@ position = Vector2(-143.99997, 0)
 scale = Vector2(2.5, 2.5)
 texture = ExtResource("7_3bfba")
 
-[node name="Atlas Building2" type="Sprite2D" parent="." unique_id=104845163]
-z_index = 1
-position = Vector2(-143.99998, 712)
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("8_1200u")
-
-[node name="Stage Collision" type="Node2D" parent="." unique_id=39067850]
-
-[node name="Floor" type="StaticBody2D" parent="Stage Collision" unique_id=378302008]
-collision_layer = 6
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Stage Collision/Floor" unique_id=1361009017]
-position = Vector2(425.00003, 119.29166)
-scale = Vector2(2.5, 2.5)
-shape = SubResource("RectangleShape2D_i0q5b")
-
-[node name="Floor2" type="StaticBody2D" parent="Stage Collision" unique_id=1775577055]
-scale = Vector2(3, 3)
-collision_layer = 6
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stage Collision/Floor2" unique_id=650209498]
-position = Vector2(-48.00001, 0)
-scale = Vector2(0.833, 0.833)
-polygon = PackedVector2Array(-218.88756, -124.849945, -113, -123, 134, -94, 141, -63, 114, 7, 115, 35, 112, 67, -286, 60, -307.6667, -374.33334, -275.33334, -384.33334)
-
-[node name="Ledge" parent="Stage Collision" unique_id=1659141917 instance=ExtResource("9_hupy6")]
-position = Vector2(205, -184)
-scale = Vector2(2, 2)
-ledge_side = "Right"
-
-[node name="Ledge2" parent="Stage Collision" unique_id=1410639809 instance=ExtResource("9_hupy6")]
-position = Vector2(1013, 112)
-scale = Vector2(2.5, 2.5)
-ledge_side = "Right"
-
-[node name="Ledge3" parent="Stage Collision" unique_id=1764653597 instance=ExtResource("9_hupy6")]
-position = Vector2(-835, -944)
-ledge_side = "Right"
-
-[node name="Ledge4" parent="Stage Collision" unique_id=525420843 instance=ExtResource("9_hupy6")]
-position = Vector2(-915, -928)
-
 [node name="Base Character" parent="." unique_id=1356891652 instance=ExtResource("10_g0tkc")]
 position = Vector2(-18, -451)
 
@@ -146,3 +105,51 @@ drag_right_margin = 0.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 script = ExtResource("11_y6kj2")
+
+[node name="Atlas Building Foreground" type="Sprite2D" parent="." unique_id=104845163]
+z_index = 1
+position = Vector2(-143.99998, 712)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("8_1200u")
+
+[node name="Atlas Building Spire" type="Sprite2D" parent="." unique_id=1446282723]
+position = Vector2(-332, -530.9999)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("12_y6kj2")
+
+[node name="Stage Collision" type="Node2D" parent="." unique_id=39067850]
+visible = false
+
+[node name="Floor" type="StaticBody2D" parent="Stage Collision" unique_id=378302008]
+collision_layer = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Stage Collision/Floor" unique_id=1361009017]
+position = Vector2(409.25, 117.99999)
+scale = Vector2(2.5, 2.5)
+shape = SubResource("RectangleShape2D_i0q5b")
+
+[node name="Floor2" type="StaticBody2D" parent="Stage Collision" unique_id=1775577055]
+scale = Vector2(3, 3)
+collision_layer = 6
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stage Collision/Floor2" unique_id=650209498]
+position = Vector2(-48.00001, 0)
+scale = Vector2(0.833, 0.833)
+polygon = PackedVector2Array(-218.88756, -124.849945, -113, -123, 35.614258, -100.040016, 41.2165, -64.825935, 118.447395, -64.825935, 134, -94, 141, -63, 114, 7, 115, 35, 112, 67, -286, 60, -307.6667, -374.33334, -275.33334, -384.33334)
+
+[node name="Ledge" parent="Stage Collision" unique_id=1659141917 instance=ExtResource("9_hupy6")]
+position = Vector2(215, -184)
+scale = Vector2(2, 2)
+ledge_side = "Right"
+
+[node name="Ledge2" parent="Stage Collision" unique_id=1410639809 instance=ExtResource("9_hupy6")]
+position = Vector2(1013.00006, 112.00001)
+scale = Vector2(2.5, 2.5)
+ledge_side = "Right"
+
+[node name="Ledge3" parent="Stage Collision" unique_id=1764653597 instance=ExtResource("9_hupy6")]
+position = Vector2(-835, -944)
+ledge_side = "Right"
+
+[node name="Ledge4" parent="Stage Collision" unique_id=525420843 instance=ExtResource("9_hupy6")]
+position = Vector2(-915, -928)
