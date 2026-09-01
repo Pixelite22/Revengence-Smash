@@ -12,6 +12,19 @@ extends CharacterBody2D
 @export var hitbox : PackedScene
 var self_state
 
+#Attributes
+@export_group("Attributes")
+@export var percent = 0
+@export var stocks = 3
+@export var weight = 100
+
+#Knockback
+var hdecay
+var vdecay
+var knockback
+var hitstun
+var connected : bool
+
 #Ground Variables
 @export_group("Ground")
 var dash_dur = 10
@@ -131,6 +144,51 @@ func up_tilt():
 	if sprite.animation == "Tilt Up":
 		if sprite.frame == 1:
 			create_hitbox(69, 62, 8, 90, 3, 120, 3, 'normal', Vector2(1.5, 1.0), 0, 1)
+		if sprite.frame == 2:
+			return true
+
+#Smash Attacks
+func up_smash():
+	if sprite.animation == "Smash Up":
+		if sprite.frame == 1:
+			create_hitbox(85, 53, 24, 90, 12, 360, 3, 'normal', Vector2(-4.5, -26.5), 0, 5)
+		if sprite.frame >= 4:
+			return true 
+
+func down_smash():
+	if sprite.animation == "Smash Down":
+		if sprite.frame == 1:
+			create_hitbox(75, 24, 24, 0, 12, 360, 3, 'normal', Vector2(-1.5, 22), 0, 5)
+		if sprite.frame >= 2:
+			return true 
+
+func back_smash():
+	if sprite.animation == "Smash Side":
+		if sprite.frame == 1:
+			create_hitbox(36, 69, 24, 45, 12, 360, 3, 'normal', Vector2(18, -0.5), 0, 5)
+		if sprite.frame >= 4:
+			return true 
+
+func forward_smash():
+	if sprite.animation == "Smash Side":
+		if sprite.frame == 1:
+			create_hitbox(36, 69, 24, 45, 12, 360, 3, 'normal', Vector2(18, -0.5), 0, 5)
+		if sprite.frame >= 4:
+			return true 
+
+func neutral_smash():
+	if sprite.animation == "Smash Side":
+		if sprite.frame == 1:
+			create_hitbox(36, 69, 24, 45, 12, 360, 3, 'normal', Vector2(18, -0.5), 0, 5)
+		if sprite.frame >= 4:
+			return true 
+
+
+#Dash Attack
+func dash_attack():
+	if sprite.animation == "Dash Attack":
+		if sprite.frame == 0:
+			create_hitbox(58, 57, 8, 22, 5, 120, 3, 'normal', Vector2(-1.0, -4.5), 0, 1)
 		if sprite.frame == 2:
 			return true
 

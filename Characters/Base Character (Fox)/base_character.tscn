@@ -1370,7 +1370,7 @@ animations = [{
 size = Vector2(43, 62)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n1tt7"]
-size = Vector2(42, 47)
+size = Vector2(36, 69)
 
 [node name="Base Character" type="CharacterBody2D" unique_id=1356891652]
 collision_mask = 30
@@ -1379,7 +1379,7 @@ hitbox = ExtResource("2_n1tt7")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=703604713]
 sprite_frames = SubResource("SpriteFrames_ci3la")
-animation = &"Air Down"
+animation = &"Crouch"
 
 [node name="Stage Collision" type="CollisionShape2D" parent="." unique_id=1714064749]
 position = Vector2(0.5, 1)
@@ -1434,5 +1434,5 @@ vertical_alignment = 1
 
 [node name="Test Hitbox" type="CollisionShape2D" parent="." unique_id=338074041]
 visible = false
-position = Vector2(7, -7.5)
+position = Vector2(18, -0.5)
 shape = SubResource("RectangleShape2D_n1tt7")

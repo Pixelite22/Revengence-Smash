@@ -22,18 +22,25 @@ func _ready() -> void:
 	add_state('LEDGE_JUMP') #15
 	add_state('LEDGE_HOP') #16
 	add_state('LEDGE_ROLL') #17
+	add_state('HITSTUN') 
 	add_state('GROUND_ATTACK') #18
 	add_state('UP_TILT') #19
 	add_state('DOWN_TILT') #20
 	add_state('LEFT_TILT') #21
 	add_state('RIGHT_TILT') #22
 	add_state('JAB') #23
-	add_state('AIR_ATTACK')
-	add_state('NEUTRAL_AIR')
-	add_state('UP_AIR')
-	add_state('DOWN_AIR')
-	add_state('FORWARD_AIR')
-	add_state('BACK_AIR')
+	add_state('AIR_ATTACK') #24
+	add_state('NEUTRAL_AIR') #25
+	add_state('UP_AIR') #26
+	add_state('DOWN_AIR') #27
+	add_state('FORWARD_AIR') #28
+	add_state('BACK_AIR') #29
+	add_state('DASH_ATTACK') #30
+	add_state('UP_SMASH') #31
+	add_state('DOWN_SMASH') #32
+	add_state('LEFT_SMASH') #33
+	add_state('RIGHT_SMASH') #34
+	add_state('NEUTRAL_SMASH') #35
 	#When ready, call the set_state function and set the state to STAND
 	call_deferred("set_state", states.STAND)
 
@@ -66,13 +73,14 @@ func get_transition(delta):
 	else: #But if they aren't grabbing the ledge
 		parent.reset_ledge() #Reset the ledge variables through the parent function
 	
-	if Input.is_action_just_pressed("attack_%s" % id) and tilt() == true:
+	if Input.is_action_just_pressed("attack_%s" % id):
 		parent.frame_reset()
-		return states.GROUND_ATTACK
-	
-	if Input.is_action_just_pressed("attack_%s" % id) and air_attack() == true:
-		parent.frame_reset()
-		return states.AIR_ATTACK
+		if tilt():
+			return states.GROUND_ATTACK
+		if air_attack():
+			return states.AIR_ATTACK
+		if dash_attack():
+			return states.DASH_ATTACK
 	
 	##From here we match the state the character currently has, 
 	##and then check for the conditions needed to change to a new state 
@@ -531,23 +539,78 @@ func get_transition(delta):
 				parent.frame_reset()
 				return states.STAND
 		
-		states.GROUND_ATTACK:
+		states.HITSTUN:
+			if parent.knockback >= 3: #3 is arbitrary(ish) and can be changed as needed
+				var bounce = parent.move_and_collide(parent.velocity * delta)
+				if bounce:
+					parent.velocity = parent.velocity.bounce(bounce.normal) * 0.8
+					parent.hitstun = round(parent.hitstun * 0.8)
+			if parent.velocity.y < 0:
+				parent.velocity.y += parent.vdecay * 0.5 * Engine.time_scale
+				parent.velocity.y = clamp(parent.velocity.y, parent.velocity.y, 0)
+			if parent.velocity.x < 0:
+				parent.velocity.x += parent.hdecay * 0.4 * -1 * Engine.time_scale
+				parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			elif parent.velocity.x > 0:
+				parent.velocity.x -= parent.hdecay * 0.4 * Engine.time_scale
+				parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+			
+			if parent.frame == parent.hitstun:
+				parent.frame_reset()
+				if parent.knockback >= 24:
+					return states.AIR
+				else:
+					return states.AIR
+			elif parent.frame > (60 * 5):
+				return states.AIR
+		
+		states.GROUND_ATTACK: #This is a abse state for attacking on the ground
 			if Input.is_action_pressed("up_%s" % id):
 				parent.frame_reset()
 				return states.UP_TILT
+				#await get_tree().create_timer(0.25).timeout
+				#if Input.get_action_strength("attack_%s" % id) == 0:
+				#	return states.UP_TILT
+				#else:
+				#	await Input.is_action_just_released("attack_%s" % id)
+				#	return states.UP_SMASH
 			if Input.is_action_pressed("down_%s" % id):
 				parent.frame_reset()
 				return states.DOWN_TILT
+				#await get_tree().create_timer(0.25).timeout
+				#if Input.get_action_strength("attack_%s" % id) == 0:
+				#	return states.DOWN_TILT
+				#else:
+				#	await Input.is_action_just_released("attack_%s" % id)
+				#	return states.DOWN_SMASH
 			if Input.is_action_pressed("left_%s" % id):
 				parent.turn(true)
 				parent.frame_reset()
 				return states.LEFT_TILT
+				#await get_tree().create_timer(0.25).timeout
+				#if Input.get_action_strength("attack_%s" % id) == 0:
+				#	return states.LEFT_TILT
+				#else:
+				#	await Input.is_action_just_released("attack_%s" % id)
+				#	return states.LEFT_SMASH
 			if Input.is_action_pressed("right_%s" % id):
 				parent.turn(false)
 				parent.frame_reset()
 				return states.RIGHT_TILT
+				#await get_tree().create_timer(0.25).timeout
+				#if Input.get_action_strength("attack_%s" % id) == 0:
+				#	return states.RIGHT_TILT
+				#else:
+				#	await Input.is_action_just_released("attack_%s" % id)
+				#	return states.RIGHT_SMASH
 			parent.frame_reset()
 			return states.JAB
+			#await get_tree().create_timer(0.25).timeout
+			#if Input.get_action_strength("attack_%s" % id) == 0:
+			#	return states.JAB
+			#else:
+			#	await Input.is_action_just_released("attack_%s" % id)
+			#	return states.NEUTRAL_SMASH
 		
 		states.UP_TILT:
 			if parent.frame == 0:
@@ -687,6 +750,116 @@ func get_transition(delta):
 #			if parent.neutral_air():
 #				return states.AIR
 		
+		states.DASH_ATTACK:
+			if parent.frame == 0:
+				parent.dash_attack()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION / 5
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION / 5
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.dash_attack():
+				return states.STAND
+		
+		states.UP_SMASH:
+			if parent.frame == 0:
+				parent.up_smash()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.up_smash():
+				if Input.is_action_pressed("up_%s" % id):
+					parent.frame_reset()
+					return states.STAND
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.DOWN_SMASH:
+			if parent.frame == 0:
+				parent.down_smash()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.down_smash():
+				if Input.is_action_pressed("down_%s" % id):
+					parent.frame_reset()
+					return states.CROUCH
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.LEFT_SMASH:
+			if parent.frame == 0:
+				parent.back_smash()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.back_smash():
+				if Input.is_action_pressed("left_%s" % id):
+					parent.frame_reset()
+					return states.DASH
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.RIGHT_SMASH:
+			if parent.frame == 0:
+				parent.forward_smash()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.forward_smash():
+				if Input.is_action_pressed("right_%s" % id):
+					parent.frame_reset()
+					return states.DASH
+				else:
+					parent.frame_reset()
+					return states.STAND
+		
+		states.NEUTRAL_SMASH:
+			if parent.frame == 0:
+				parent.neutral_smash()
+				pass
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
+				elif parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION * 3
+					parent.velocity.x = clamp(parent.velocity.x, parent.velocity.x, 0)
+			if parent.neutral_smash():
+				return states.STAND
+#				if Input.is_action_pressed("right_%s" % id):
+#					parent.frame_reset()
+#					return states.DASH
+#				else:
+#					parent.frame_reset()
+#					return states.STAND
+		
 
 func enter_state(new_state, old_state):
 	match new_state:
@@ -772,6 +945,24 @@ func enter_state(new_state, old_state):
 		states.BACK_AIR:
 			parent.play_animation('Air Back')
 			parent.state.text = "Back Air"
+		states.DASH_ATTACK:
+			parent.play_animation('Dash Attack')
+			parent.state.text = "Dash Attack"
+		states.UP_SMASH:
+			parent.play_animation("Smash Up")
+			parent.state.text = "Up Smash"
+		states.DOWN_SMASH:
+			parent.play_animation("Smash Down")
+			parent.state.text = "Down Smash"
+		states.LEFT_SMASH:
+			parent.play_animation("Smash Side")
+			parent.state.text = "Side Smash"
+		states.RIGHT_SMASH:
+			parent.play_animation("Smash Right")
+			parent.state.text = "Right Smash"
+		states.NEUTRAL_SMASH:
+			parent.play_animation("Smash Neutral")
+			parent.state.text = "Neutral Smash"
 
 func exit_state(old_state, new_state):
 	pass
@@ -917,9 +1108,13 @@ func ledge(): ##Function handles ledge interactions
 				return true
 
 func tilt():
-	if state_includes([states.STAND, states.MOONWALK, states.DASH, states.RUN, states.WALK, states.CROUCH]):
+	if state_includes([states.STAND, states.MOONWALK, states.DASH, states.WALK, states.CROUCH]):
 		return true
 
 func air_attack():
 	if state_includes([states.SHORT_HOP, states.FULL_HOP, states.AIR]):
+		return true
+
+func dash_attack():
+	if state_includes([states.RUN]):
 		return true
